@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Democracia em arquivo: Hub digital de histórias</title>
+  <!--
+    Arquivo único e estático (HTML + CSS + JS vanilla) para publicar direto no Netlify/Vercel/GitHub Pages.
+    ✅ Sem dependências, sem build. É só enviar este arquivo como index.html.
+    Estrutura geral:
+      - Cabeçalho com navegação fixa
+      - Campo de busca (filtra links por texto)
+      - Seções temáticas com âncoras
+      - Cada recurso é um <li> com título, descrição e fonte
+      - CSS simples no <style> e JS mínimo no final para busca/scroll suave
+  -->
+  <style>
+    /* —— Base visual —— */
+    :root {
+      --azul-fundo: #add8e6;   /* Azul claro solicitado */
+      --azul-escuro: #0b3c5d;  /* Títulos */
+      --azul-medio: #155e8a;   /* Destaques */
+      --texto: #0f172a;        /* Cinza bem escuro para boa leitura */
+      --card: #ffffff;         /* Fundo dos cartões/listas */
+      --borda: #dbeafe;        /* Bordas suaves */
+      --link: #083a8c;         /* Links */
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--azul-fundo);
+      color: var(--texto);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* —— Header e navegação —— */
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { width:36px; height:36px; border-radius:12px; background: linear-gradient(135deg,#38bdf8,#6366f1); box-shadow: inset 0 0 10px rgba(0,0,0,.08); }
+    .title { margin:0; font-size: 1.15rem; color: var(--azul-escuro); }
+    .subtitle { margin:0; font-size: .8rem; color:#334155; }
+
+    nav {
+      display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:flex-end;
+      font-size:.9rem; margin-top:10px;
+    }
+    nav a { color:var(--link); text-decoration:none; padding:6px 10px; border-radius:8px; }
+    nav a:hover { background:#e0f2fe; }
+
+    /* —— Herói + busca —— */
+    .hero { padding: 28px 16px 10px; }
+    .hero h1 { margin:0 0 6px; color:var(--azul-escuro); font-size: 1.8rem; }
+    .hero p { margin: 0 0 14px; color:#1f2937; }
+
+    .tools { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .search {
+      flex:1 1 340px;
+      display:flex; gap:8px; align-items:center; background: var(--card);
+      border:1px solid var(--borda); border-radius:12px; padding:10px 12px;
+    }
+    .search input {
+      width:100%; border:0; outline:0; font-size:1rem; background:transparent;
+    }
+    .pill { font-size:.8rem; background:#0ea5e9; color:white; padding:8px 12px; border-radius:999px; white-space:nowrap; }
+
+    /* —— Seções e listas —— */
+    section { padding: 18px 16px; }
+    section h2 { color:var(--azul-escuro); margin: 12px 0 6px; font-size:1.35rem; }
+    .note { color:#334155; font-size:.9rem; margin: 6px 0 14px; }
+
+    .block {
+      background: var(--card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 10px 0 16px;
+    }
+
+    details { border: 1px dashed var(--borda); border-radius:12px; padding: 8px 10px; background:#f8fafc; }
+    details + details { margin-top:10px; }
+    summary { cursor:pointer; font-weight:600; color:var(--azul-medio); }
+
+    ul.res-list { list-style: none; padding:0; margin: 10px 0 0; }
+    .res-item { padding:10px; border-bottom:1px solid #eef2ff; }
+    .res-item:last-child { border-bottom:0; }
+    .res-item a { color:var(--link); text-decoration:none; }
+    .res-item a:hover { text-decoration:underline; }
+    .src { font-size:.85rem; color:#475569; }
+    .desc { font-size:.95rem; color:#1f2937; }
+
+    /* —— Rodapé —— */
+    footer { border-top:1px solid var(--borda); background:#fff; margin-top: 12px; }
+    footer .wrap { display:flex; flex-direction:column; gap:4px; }
+    .small { font-size:.85rem; color:#334155; }
+
+    /* —— Acessibilidade —— */
+    a:focus, button:focus, input:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <!-- —— Cabeçalho com navegação —— -->
+  <header>
+    <div class="wrap" role="navigation" aria-label="Navegação principal">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <p class="title">Democracia em arquivo: Hub digital de histórias</p>
+          <p class="subtitle">Recursos para Fundamental II e Ensino Médio • fontes confiáveis</p>
+        </div>
+      </div>
+      <nav>
+        <!-- Links-âncora para pular até as seções. Mantém a página em um único arquivo. -->
+        <a href="#fontes">Fontes & Acervos</a>
+        <a href="#constituicao">Constituição & Leis</a>
+        <a href="#cnv">Comissões da Verdade</a>
+        <a href="#regionais">Acervos Regionais</a>
+        <a href="#planos">Planos</a>
+        <a href="#atividades">Atividades</a>
+        <a href="#infograficos">Textos & Infográficos</a>
+        <a href="#livros">Livros</a>
+        <a href="#artigos">Artigos SciELO</a>
+        <a href="#temas">Por tema</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- —— Seção herói + busca —— -->
+  <div class="wrap hero">
+    <h1>Recursos de História do Brasil (1900 → hoje)</h1>
+    <p>Seleção de documentos, planos, sequências didáticas, infográficos e livros abertos. Filtre pelo campo abaixo para localizar rapidamente um tema, autor(a) ou instituição.</p>
+    <div class="tools">
+      <!-- Campo de busca: filtra os itens em tempo real pelo texto do usuário -->
+      <label class="search" aria-label="Pesquisar recursos">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="#0f172a" stroke-width="1.6"/></svg>
+        <input id="q" type="search" placeholder="Pesquisar por termo (ex.: Diretas Já, BN Digital, CF/88, mulheres)…" />
+      </label>
+      <span class="pill" title="Abrangência">EF II • EM</span>
+    </div>
+  </div>
+
+  <main class="wrap" id="conteudo">
+    <!--
+      Cada seção usa listas padronizadas (.res-list). Itens têm classes (.res-item, .desc, .src)
+      que o buscador JS usa para localizar correspondências de texto.
+    -->
+
+    <!-- —— Fontes & Acervos —— -->
+    <section id="fontes" aria-labelledby="h-fontes">
+      <h2 id="h-fontes">Fontes & Acervos (documentos históricos)</h2>
+      <p class="note">Prioriza portais institucionais (Arquivo Nacional, Biblioteca Nacional, câmaras legislativas). Evita duplicações desnecessárias.</p>
+
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Memórias Reveladas</strong> — Banco de dados sobre repressão política (1964–85). <span class="src">Arquivo Nacional</span><br>
+            <a href="https://www.gov.br/memoriasreveladas/pt-br/faca-uma-pesquisa-em-nossa-base-de-dados" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Hemeroteca Digital Brasileira</strong> — Periódicos digitalizados, busca avançada por título/ano. <span class="src">Biblioteca Nacional</span><br>
+            <a href="https://bndigital.bn.gov.br/hemeroteca-digital/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Acervo Digital BN</strong> — Livros, mapas, imagens e hemeroteca. <span class="src">Biblioteca Nacional</span><br>
+            <a href="https://bndigital.bn.br/acervodigital/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Memória BN (espelho)</strong> — Acesso alternativo a jornais e revistas. <span class="src">Biblioteca Nacional</span><br>
+            <a href="https://memoria.bn.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Portal do Arquivo Nacional</strong> — Exposições e coleções temáticas. <span class="src">Arquivo Nacional</span><br>
+            <a href="https://www.gov.br/arquivonacional/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>SciELO Livros</strong> — Ebooks de Humanidades e Ciências Sociais. <span class="src">SciELO</span><br>
+            <a href="https://books.scielo.org/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Internet Archive — História do Brasil</strong> — Obras em domínio público e coleções históricas. <span class="src">Internet Archive</span><br>
+            <a href="https://archive.org/details/historia-do-brasil" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Subconjuntos por tema dentro de Fontes -->
+      <details>
+        <summary>Segunda Guerra Mundial e FEB (ampliado)</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Exposição virtual — Força Expedicionária Brasileira</strong> — Documentos e iconografia da FEB. <span class="src">Arquivo Nacional</span><br>
+            <a href="https://www.gov.br/arquivonacional/pt-br/assuntos/exposicoes-memorias-reveladas/forca-expedicionaria-brasileira" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Hemeroteca (1942–45)</strong> — Pesquise notícias da entrada do Brasil na guerra. <span class="src">BN Digital</span><br>
+            <a href="https://bndigital.bn.gov.br/hemeroteca-digital/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Movimentos sociais contemporâneos</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Brasil Escola — Movimentos sociais</strong> — Textos didáticos introdutórios. <span class="src">Brasil Escola</span><br>
+            <a href="https://brasilescola.uol.com.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Nexo Explica</strong> — Reportagens e explicadores com contexto histórico. <span class="src">Nexo</span><br>
+            <a href="https://www.nexojornal.com.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- —— Constituição & Legislação ——
+      Evitamos repetições: mantemos (1) texto oficial Planalto (HTML) e (2) uma edição em PDF.
+    -->
+    <section id="constituicao" aria-labelledby="h-const">
+      <h2 id="h-const">Constituição de 1988 & Legislação</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Constituição Federal de 1988 (texto oficial)</strong> — Consulta online. <span class="src">Planalto</span><br>
+            <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>CF/88 em PDF (edição técnica)</strong> — Versão comentada/atualizada. <span class="src">Senado Federal</span><br>
+            <a href="https://www2.senado.leg.br/bdsf/bitstream/handle/id/518231/CF88_Livro_EC91_2016.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Normas/CONLEG (URNs & versões)</strong> — Versões consolidadas e referência canônica. <span class="src">normas.leg.br</span><br>
+            <a href="https://normas.leg.br/?urn=urn%3Alex%3Abr%3Afederal%3Aconstituicao%3A1988-10-05%3B1988" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Comissões da Verdade —— -->
+    <section id="cnv" aria-labelledby="h-cnv">
+      <h2 id="h-cnv">Comissões da Verdade (documentos e relatórios)</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Comissão Nacional da Verdade — Acervo</strong> — Relatórios e bancos de depoimentos. <span class="src">Memórias Reveladas</span><br>
+            <a href="http://cnv.memoriasreveladas.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Relatório Final da CNV</strong> — Volume principal em PDF. <span class="src">CNV</span><br>
+            <a href="http://cnv.memoriasreveladas.gov.br/index.php/outros-destaques/574-relatorio-final-da-cnv" target="_blank" rel="noopener noreferrer">Baixar</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Acervos Regionais —— -->
+    <section id="regionais" aria-labelledby="h-regionais">
+      <h2 id="h-regionais">Acervos Regionais (amostra representativa)</h2>
+      <details class="block" open>
+        <summary>Arquivos públicos estaduais e municipais</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Arquivo Público do Estado de São Paulo</strong> — Acervos, iconografia, legislação estadual. <span class="src">APESP</span><br>
+            <a href="https://www.arquivoestado.sp.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Arquivo Público Mineiro</strong> — Acervos digitais e publicações. <span class="src">APM</span><br>
+            <a href="http://www.siaapm.cultura.mg.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Arquivo Público do Estado do Rio de Janeiro</strong> — Coleções e pesquisa. <span class="src">APERJ</span><br>
+            <a href="http://www.aperj.rj.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Fundação Biblioteca Nacional — Mapas</strong> — Cartografia histórica do Brasil. <span class="src">BN</span><br>
+            <a href="http://objdigital.bn.br/acervo_digital/div_cartografia/cartografia.htm" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- —— Planos de Aula —— -->
+    <section id="planos" aria-labelledby="h-planos">
+      <h2 id="h-planos">Planos de aula (EF II • EM)</h2>
+      <p class="note">Planos priorizam Nova Escola, Teachy e materiais públicos/abertos. (Sem vídeos.)</p>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Movimentos de resistência à ditadura</strong> — 9º ano. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/planos-de-aula/fundamental/9ano/historia/movimentos-de-resistencia-a-ditadura-civil-militar-no-brasil/5169" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>O movimento das Diretas Já</strong> — 9º ano. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/planos-de-aula/fundamental/9ano/historia/o-movimento-das-diretas-ja-quando-o-povo-pede-democracia/5485" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>BNCC EF09HI22 — Redemocratização</strong> — Trilha com 3 planos. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/planos-de-aula/habilidades/ef09hi22" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Ditadura cívico-militar — Hands-on</strong> — Atividades práticas. <span class="src">Teachy</span><br>
+            <a href="https://www.teachy.com.br/planos-de-aula/ensino-fundamental/9ano/historia/brasil-ditadura-civico-militar-HandsOn-estudar-o-processo-e-a-implantacao-da-ditadura-civ" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Imprensa alternativa e resistência</strong> — PDF. <span class="src">Nova Escola</span><br>
+            <a href="https://nova-escola-producao.s3.amazonaws.com/3YM8FVnHCSs5xPK4bVCB2GnJftqr8qJV2RU7GC7Tks28pGgcvvQ9jTuF9anA/plano-de-aula-his9-20und01pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Plano — Bombas atômicas (EF II)</strong> — Metodologia ativa (PDF). <span class="src">eduCAPES</span><br>
+            <a href="https://educapes.capes.gov.br/bitstream/capes/597636/2/Plano-de-aula-historia-bomba-atomica-metodologia-ativa.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <!-- Planos ampliados (sem URLs diretas específicas, indicamos busca no portal confiável) -->
+          <li class="res-item"><strong>O pacto colonial</strong> — 7º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>A política na Primeira República</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Revoltas rurais: Canudos e Contestado</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>O período varguista</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Golpe de 1964</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Resistência à ditadura</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Redemocratização e comissões da verdade</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Mulheres no mercado de trabalho</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Trabalho e resistência feminina — Primeira República</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Movimentos sociais — sequência</strong> — 9º ano. <span class="src">Nova Escola (buscar no portal)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Sequências didáticas & Atividades —— -->
+    <section id="atividades" aria-labelledby="h-ativ">
+      <h2 id="h-ativ">Sequências didáticas & Atividades</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Sequência — Ditadura civil-militar</strong> — Coleção com 2 planos. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/colecao/623/ditadura-civil-militar" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Diretas Já — direitos civis</strong> — Sequência (PDF). <span class="src">PNLD/Plurall</span><br>
+            <a href="https://plurall-content.s3.amazonaws.com/oeds/NV_ORG/PNLD/PNLD20/Historiar/9ano/03_BIMESTRE/08_VERSAO_FINAL/03_PDFS/20_HISTORIAR_9ANO_3BIM_Sequencia_didatica_3_TRTA.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Ditadura e resistência</strong> — Sequência (PDF). <span class="src">eduCAPES</span><br>
+            <a href="https://educapes.capes.gov.br/bitstream/capes/742880/2/Sequencia%20Didatica.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Atividade — Ditadura e resistência (Aluno)</strong> — Folha do aluno (PDF). <span class="src">SEDUC-GO</span><br>
+            <a href="https://portal.educacao.go.gov.br/wp-content/uploads/2021/08/Atividade-13-9o-ano-HIS-A-ditadura-civil-militar-e-os-processos-de-resistencia-Aluno.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Movimentos sociais</strong> — Atividades prontas. <span class="src">Nova Escola (buscar no portal)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Textos explicativos & Infográficos —— -->
+    <section id="infograficos" aria-labelledby="h-info">
+      <h2 id="h-info">Textos explicativos & Infográficos</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Diretas Já — síntese didática</strong> — Resumo e contexto. <span class="src">Brasil Escola</span><br>
+            <a href="https://brasilescola.uol.com.br/historiab/direta-ja.htm" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Diretas Já — linha do tempo</strong> — Texto didático. <span class="src">Mundo Educação</span><br>
+            <a href="https://mundoeducacao.uol.com.br/historiadobrasil/diretas-ja.htm" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Engenho colonial</strong> — Diagrama do ciclo do açúcar. <span class="src">Imago História</span><br>
+            <a href="https://www.imagohistoria.com.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Brasil na Segunda Guerra</strong> — Linha do tempo e documentos. <span class="src">Arquivo Nacional</span><br>
+            <a href="https://www.gov.br/arquivonacional/pt-br/assuntos/exposicoes-memorias-reveladas/forca-expedicionaria-brasileira" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Ditadura (1964–1985) — atos e repressão</strong> — Linha do tempo. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>A luta das mulheres por direitos</strong> — Marcos históricos. <span class="src">Nova Escola (buscar no portal)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Livros & Ebooks —— -->
+    <section id="livros" aria-labelledby="h-livros">
+      <h2 id="h-livros">Livros & Ebooks (acesso aberto)</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>SciELO Livros</strong> — Coleções abertas de Humanidades. <span class="src">SciELO</span><br>
+            <a href="https://books.scielo.org/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Capítulos da História Colonial</strong> — PDF. <span class="src">SciELO Livros</span><br>
+            <a href="https://books.scielo.org/id/kp484/pdf/abreu-9788579820717.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Os jovens e a História: Brasil e América do Sul</strong> — PDF. <span class="src">SciELO Livros</span><br>
+            <a href="https://books.scielo.org/id/zz46v/pdf/cerri-9788577982486.pdf" target="_blank" rel="noopener noreferrer">Baixar PDF</a>
+          </li>
+          <li class="res-item"><strong>Ilustres ordinários do Brasil</strong> — Ensaios históricos. <span class="src">SciELO Livros</span><br>
+            <a href="https://books.scielo.org/id/b753r" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Coleção História do Brasil</strong> — Obras em domínio público. <span class="src">Internet Archive</span><br>
+            <a href="https://archive.org/details/historia-do-brasil" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>História do Brasil (Rocha Pombo, 1956)</strong> — Clássico (domínio público). <span class="src">Internet Archive</span><br>
+            <a href="https://archive.org/details/historia-do-brasil" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Bóris Fausto — História do Brasil</strong> — Referência para EM (ver edições disponíveis). <span class="src">Catálogos e bibliotecas</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Artigos acadêmicos SciELO —— -->
+    <section id="artigos" aria-labelledby="h-artigos">
+      <h2 id="h-artigos">Artigos acadêmicos (repositórios confiáveis)</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>SciELO Brasil</strong> — Busca por temas (Ditadura, Diretas, Feminismos). <span class="src">SciELO</span><br>
+            <a href="https://scielo.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Portal de Periódicos CAPES</strong> — Acesso a artigos e periódicos. <span class="src">CAPES</span><br>
+            <a href="https://www.periodicos.capes.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Biblioteca Digital de Teses e Dissertações</strong> — Pesquisas acadêmicas. <span class="src">BDTD/IBICT</span><br>
+            <a href="https://bdtd.ibict.br/vufind/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Organização por tema —— -->
+    <section id="temas" aria-labelledby="h-temas">
+      <h2 id="h-temas">Organização por tema (1900 → hoje)</h2>
+
+      <!-- Cada <details> é um "módulo" temático, útil para aula -->
+      <details class="block" open>
+        <summary>República Velha (1889–1930) — 9º ano/EM</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Introdução à República Velha</strong> — Planos e sequências. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Jornais da época</strong> — Use a Hemeroteca para manchetes e editoriais. <span class="src">BN Digital</span><br>
+            <a href="https://bndigital.bn.gov.br/hemeroteca-digital/" target="_blank" rel="noopener noreferrer">Pesquisar</a>
+          </li>
+        </ul>
+      </details>
+
+      <details class="block">
+        <summary>Era Vargas (1930–1945) — 9º ano/EM</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Planos — Era Vargas</strong> — Populismo, trabalhismo, propaganda. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Textos acadêmicos</strong> — Pesquise por "Vargas" e "Estado Novo". <span class="src">SciELO Livros</span><br>
+            <a href="https://books.scielo.org/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+
+      <details class="block">
+        <summary>Ditadura Militar (1964–1985) — 9º ano/EM</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Sequência didática (2 planos)</strong> — Golpe, AI-5, resistência. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/colecao/623/ditadura-civil-militar" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Relatórios e acervos</strong> — Depoimentos e documentos. <span class="src">CNV/Memórias Reveladas</span><br>
+            <a href="http://cnv.memoriasreveladas.gov.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+
+      <details class="block">
+        <summary>Redemocratização & Constituição de 1988 — 9º ano/EM</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Planos (EF09HI22)</strong> — Participação política e cidadania. <span class="src">Nova Escola</span><br>
+            <a href="https://novaescola.org.br/planos-de-aula/habilidades/ef09hi22" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>CF/88 (HTML)</strong> — Texto oficial. <span class="src">Planalto</span><br>
+            <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" target="_blank" rel="noopener noreferrer">Consultar</a>
+          </li>
+        </ul>
+      </details>
+
+      <details class="block">
+        <summary>História das Mulheres — EF II/EM</summary>
+        <ul class="res-list">
+          <li class="res-item"><strong>Mulheres no trabalho e movimentos feministas</strong> — Planos e projetos. <span class="src">Nova Escola (buscar no portal)</span></li>
+          <li class="res-item"><strong>Leituras em acesso aberto</strong> — Pesquise gênero e cidadania. <span class="src">SciELO Brasil</span><br>
+            <a href="https://scielo.br/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- —— Ferramentas úteis —— -->
+    <section aria-labelledby="h-tools2">
+      <h2 id="h-tools2">Ferramentas de pesquisa (complementares)</h2>
+      <div class="block">
+        <ul class="res-list">
+          <li class="res-item"><strong>Wayback Machine</strong> — Ver versões antigas de sites/páginas citadas. <span class="src">Internet Archive</span><br>
+            <a href="https://web.archive.org/" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+          <li class="res-item"><strong>Catálogo BN — Pesquisa integrada</strong> — Busque por autor, assunto, período. <span class="src">Biblioteca Nacional</span><br>
+            <a href="https://acervo.bn.gov.br/sophia_web/index.html" target="_blank" rel="noopener noreferrer">Acessar</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- —— Contato —— -->
+    <section id="contato" aria-labelledby="h-contato">
+      <h2 id="h-contato">Contato e autoria</h2>
+      <div class="block">
+        <p>Para sugestões, correções e novos materiais, escreva para <strong><a href="mailto:anabeatrizestudos91@gmail.com">anabeatrizestudos91@gmail.com</a></strong>.</p>
+        <p class="small">Todos os recursos listados são públicos e confiáveis; o hub organiza links para uso educacional. Se algum link estiver fora do ar, entre em contato para atualização.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap small">
+      <div>© <span id="ano"></span> Democracia em arquivo — Hub digital de histórias.</div>
+      <div>Este site é estático e pode ser hospedado em Netlify/Vercel/GitHub Pages sem build.</div>
+    </div>
+  </footer>
+
+  <script>
+    // —— Preenche o ano automaticamente no rodapé ——
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    // —— Busca em tempo real ——
+    // Como funciona: a cada digitação no campo #q, pegamos o termo e
+    //   comparamos com o texto de cada item (.res-item). Itens sem
+    //   correspondência são ocultados (display:none). As seções continuam.
+    const input = document.getElementById('q');
+    const items = Array.from(document.querySelectorAll('.res-item'));
+
+    function normaliza(t) {
+      return (t || '')
+        .toLowerCase()
+        .normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    }
+
+    input.addEventListener('input', () => {
+      const termo = normaliza(input.value);
+      items.forEach((li) => {
+        const texto = normaliza(li.textContent);
+        li.style.display = texto.includes(termo) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
